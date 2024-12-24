@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FreqLinearMapping"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/bookcase">
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/TV0"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Audio Play"-->
+<!--        android:textSize="35dp"/>-->
+
+<!--    <pl.droidsonroids.gif.GifImageButton-->
+<!--        android:id="@+id/gifImageButton"-->
+<!--        android:layout_width="130dp"-->
+<!--        android:layout_height="130dp"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/TV_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="調整頻段範圍"
+            android:textSize="43dp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:orientation="vertical"
+        android:background="@drawable/blackboardnewnew">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp">-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:gravity="center"-->
+<!--                android:textSize="35dp"-->
+<!--                android:text="抓取頻段下限值"-->
+<!--                android:textColor="@color/white"/>-->
+<!--        </LinearLayout>-->
+<!--        <com.google.android.material.slider.Slider-->
+<!--            android:id="@+id/slider"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="25dp"-->
+<!--            app:trackHeight="9dp"/>-->
+<!--            android:background="@color/white"-->
+<!--            android:value="100"-->
+<!--            android:stepSize="10"-->
+<!--            android:valueTo="5000"-->
+<!--            android:progressBackgroundTint="@color/buttonyellow"-->
+<!--            android:progressTint="@color/deepblue"-->
+<!--            android:thumb="@color/teal_700"/>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/hz60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="60Hz"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/hz125"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="125Hz"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/hz250"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="33"
+                android:text="250Hz"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/hz500"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="33"
+                android:text="500Hz"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/hz1k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="33"
+                android:text="1KHz"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/hz2k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="33"
+                android:text="2KHz"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/hz4k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="33"
+                android:text="4KHz"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/hz8k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="33"
+                android:text="8KHz"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="頻率:"
+                android:textColor="@color/white"
+                android:textSize="35sp" />
+
+            <Spinner
+                android:id="@+id/freqselector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:entries="@array/frequency" />
+        </LinearLayout>
+
+
+<!--        <SeekBar-->
+
+<!--            android:id="@+id/seekBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:background="@color/white"-->
+<!--            android:max="5000"-->
+<!--            android:progress="100"-->
+<!--            android:thumb="@drawable/thumb"-->
+<!--            android:progressDrawable="@drawable/seekbar_background"/>-->
+<!--        android:progressBackgroundTint="@color/buttonyellow"-->
+<!--        android:progressTint="@color/deepblue"-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/seekText"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="目前拖移值 / 最大值 = 0Hz / 5000Hz"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="19dp" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="right">
+
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/setLowBtn"-->
+<!--                android:layout_width="160dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Hz"-->
+<!--                android:textSize="25dp"-->
+<!--                android:textColor="@color/white"/>-->
+<!--            <Button-->
+<!--                android:id="@+id/lowerBtn"-->
+<!--                android:layout_width="230dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:text="下限確認鈕"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="24dp" />-->
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textSize="35dp"/>
+    </LinearLayout>
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:orientation="vertical"
+        android:background="@drawable/blackboardnewnew">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp">-->
+<!---->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:gravity="center"-->
+<!--                android:textSize="35dp"-->
+<!--                android:text="抓取頻段上限值"-->
+<!--                android:textColor="@color/white"/>-->
+<!--        </LinearLayout>-->
+<!--        <SeekBar-->
+<!--            android:id="@+id/seekBar2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:background="@color/white"-->
+<!--            android:max="5000"-->
+<!--            android:progress="100"-->
+<!--            android:thumb="@drawable/thumb"-->
+<!--            android:progressDrawable="@drawable/seekbar_background" />-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="35dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/hzTV"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:gravity="left"
+                android:textSize="28dp"
+                android:text="目前頻率值："
+                android:textColor="@color/white"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/setUpBtn"-->
+            <!--                android:layout_width="160dp"-->
+            <!--                android:layout_height="30dp"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="Hz"-->
+            <!--                android:textSize="25dp"-->
+            <!--                android:textColor="@color/white"/>-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/check_db"
+                    android:layout_width="180dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:text="聽到了"
+                    android:textColor="@color/black"
+                    android:textSize="24dp" />
+
+                <Button
+                    android:id="@+id/dbBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:text="開始測試"
+                    android:textColor="@color/black"
+                    android:textSize="24dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnFinish"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="完成"
+            android:textColor="#000000"
+            android:textSize="25dp" />
+    </LinearLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

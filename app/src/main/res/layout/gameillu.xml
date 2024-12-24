@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="420dp"
+    android:layout_height="fill_parent"
+    android:background="#e7dfd8"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:id="@+id/gT1"
+            android:text="1.\n點選開始鍵\n進行遊戲"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/gT1"
+            android:id="@+id/gI1"
+            android:background="@drawable/start"
+            android:layout_gravity="bottom"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:id="@+id/gT2"
+        android:layout_below="@id/gI1"
+        android:layout_marginTop="15dp"
+        android:text="2.\n聆聽發音"/>
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="160dp"
+        android:layout_below="@id/gT2"
+        android:id="@+id/gI2"
+        android:background="@drawable/gameilluex"
+        android:layout_gravity="right"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:id="@+id/gT3"
+        android:layout_below="@id/gI2"
+        android:layout_marginTop="15dp"
+        android:text="3.\n點擊麥克風圖示\n跟著唸一遍"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/gT3"
+        android:id="@+id/gI3"
+        android:background="@drawable/microphone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:id="@+id/gT4"
+        android:layout_below="@id/gI3"
+        android:layout_marginTop="15dp"
+        android:text="4.\n唸完點擊暫停鍵\n進行分析"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/gT4"
+        android:id="@+id/gI4"
+        android:background="@drawable/pause" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:id="@+id/gT5"
+        android:layout_below="@id/gI4"
+        android:layout_marginTop="15dp"
+        android:text="5.選擇再唸一次\n  或是進行下一題"/>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="320dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/gT5"
+        android:id="@+id/gI5"
+        android:background="@drawable/gameillubt" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="50dp"
+        android:textColor="@color/black"
+        android:id="@+id/gBT1"
+        android:text="OK"
+        android:layout_gravity="bottom|right"/>
+
+
+</LinearLayout>

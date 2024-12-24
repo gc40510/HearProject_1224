@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><style name="NoTitle" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowActivityTransitions">true</item>
+    </style>
+    <style name="TabWidgetTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+    <style name="DialogTitle" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textSize">24dp</item>
+    </style>
+</resources>

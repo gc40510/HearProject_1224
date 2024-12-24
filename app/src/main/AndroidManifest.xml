@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.rfinal">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/dinasour"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/dinasour"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Rfinal">
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".FreqLinearMapping"
+            android:exported="false" />
+        <activity
+            android:name=".PreTestPage"
+            android:exported="false" />
+        <activity android:name=".MainActivitye" />
+        <activity android:name=".MainActivityd" />
+        <activity android:name=".MainActivityc" />
+        <activity android:name=".MainActivityb" />
+        <activity android:name=".MainActivitya" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

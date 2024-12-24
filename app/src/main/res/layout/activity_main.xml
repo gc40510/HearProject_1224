@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <TabHost
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:theme="@style/TabWidgetTheme"
+        android:id="@+id/TH1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/bookcaseboard"/>
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bookcase">
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp">
+                        <TextView
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/TTT1"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="同意書"
+                            android:textColor="@color/black"
+                            android:backgroundTint="#BB5E00"
+                            android:visibility="invisible"
+                            android:id="@+id/btn_agreement"/>
+
+
+
+                    </LinearLayout>
+
+                    <!-- 01 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"/>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageButton
+                                android:id="@+id/IB22"
+                                android:layout_width="180dp"
+                                android:layout_height="180dp"
+                                android:background="@drawable/bookyellow"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="聽力\n測試"
+                                android:textColor="@color/black"
+                                android:textSize="30sp"></TextView>
+
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"/>
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageButton
+                                android:id="@+id/IB11"
+                                android:layout_width="180dp"
+                                android:layout_height="180dp"
+                                android:background="@drawable/bookblue"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="單詞\n練習"
+                                android:textColor="@color/black"
+                                android:textSize="30sp"></TextView>
+
+                        </FrameLayout>
+                    <LinearLayout
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <!-- 02 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"/>
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageButton
+                                android:id="@+id/IB12"
+                                android:layout_width="180dp"
+                                android:layout_height="180dp"
+                                android:background="@drawable/bookgreen"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="發音\n指導"
+                                android:textColor="@color/black"
+                                android:textSize="30sp"></TextView>
+
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"/>
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageButton
+                                android:id="@+id/IB21"
+                                android:layout_width="180dp"
+                                android:layout_height="180dp"
+                                android:background="@drawable/bookred"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textColor="@color/black"
+                                android:text="練習\n紀錄"
+                                android:textSize="30sp"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="12dp">
+                            </TextView>
+
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <!-- 03 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_marginLeft="60dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+
+                        <!--
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/IB31"
+                            android:src="@drawable/groupe"
+                            android:background="@android:color/transparent"
+                            ></ImageButton>
+                            -->
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="nothing"/>
+                    <Button
+                        android:id="@+id/ResetBt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Reset"
+                        android:background="@color/black"/>
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+
+
+
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--相当于做了一张圆角的图片,然后给button作为背景图片-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- 圓角，Layout佈局圓角幅度設定值 -->
+    <corners
+        android:radius="30dip"
+        />
+    <!-- 框內底部顏色 -->
+    <solid
+        android:color="@android:color/black"
+        />
+    <!-- 外框，框線粗細，框線顏色 -->
+    <stroke
+        android:width="1.0sp"
+        android:color="#e7feff"
+        />
+
+    <!-- 畫面顏色漸層，開始色碼與結束色碼進行漸層，角度為315度 -->
+    <gradient
+        android:startColor="#e7feff"
+        android:endColor="#FFD2D2"
+        android:angle="90"
+        />
+
+    <!-- padding內縮距離 -->
+    <padding
+        android:left="3sp"
+        android:right="3sp"
+        android:top="5sp"
+        android:bottom="5sp"
+        />
+
+    <!-- 尺寸大小 -->
+    <size
+        android:width="500sp"
+        android:height="500sp"
+        />
+</shape>
