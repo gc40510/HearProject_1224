@@ -177,7 +177,7 @@ public class MainActivity<fontType> extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("請選擇您的課程");
-                String items[] = {"george","水果", "動物", "日常用品"}; //-1代表沒有條目被選中 綜合改george
+                String items[] = {"綜合","水果", "動物", "日常用品"}; //-1代表沒有條目被選中 綜合改george
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

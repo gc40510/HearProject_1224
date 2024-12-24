@@ -318,7 +318,7 @@ public class MainActivitya extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String theme = bundle.getString("theme");
         Map<String, String> thememap = new HashMap<>();
-        thememap.put("george", "george.txt"); //改成自己錄的音檔
+        thememap.put("綜合", "george.txt"); //改成自己錄的音檔
         thememap.put("水果", "fruit.txt");
         thememap.put("動物", "animal.txt");
         thememap.put("日常用品", "daily.txt");
