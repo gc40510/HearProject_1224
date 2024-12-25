@@ -124,6 +124,10 @@ public class MainActivitya extends AppCompatActivity {
     Button show_result_btn;
     // show_result_btn
     // -> 顯示測試結果
+    Button show_mouth_tech_btn;
+    // -> 顯示嘴型技巧
+
+
 
     TextView TV1;
     TextView T1;
@@ -333,6 +337,7 @@ public class MainActivitya extends AppCompatActivity {
         soundbtngroup =  findViewById(R.id.soundbtngroup);
         img_pad = findViewById(R.id.img_pad);
         repeat_audio_btn = (Button) findViewById(R.id.repeat);
+        show_mouth_tech_btn = (Button) findViewById(R.id.show_mouth_tech_btn);
         show_result_btn = (Button) findViewById(R.id.show_result_btn);
         T1 = findViewById(R.id.Ta1);
         TV1 = findViewById(R.id.aTV1);
@@ -507,6 +512,7 @@ public class MainActivitya extends AppCompatActivity {
                     BT3.setVisibility(View.VISIBLE);
                     repeat_audio_btn.setVisibility(View.VISIBLE);
                     show_result_btn.setVisibility(View.VISIBLE);
+                    show_mouth_tech_btn.setVisibility(View.VISIBLE);
                     IV2.setVisibility(View.INVISIBLE);
 //                    IV2.setImageResource(getResources().getIdentifier("@drawable/microphone", null, getPackageName()));
                     IV2.setImageDrawable(getResources().getDrawable(R.drawable.microphone));
@@ -522,6 +528,7 @@ public class MainActivitya extends AppCompatActivity {
                 IV2.setVisibility(View.VISIBLE);
                 repeat_audio_btn.setVisibility(View.INVISIBLE);
                 show_result_btn.setVisibility(View.INVISIBLE);
+                show_mouth_tech_btn.setVisibility(View.INVISIBLE);
                 if(fruitNo == 1) {
                     BT1.setVisibility(View.INVISIBLE);
                 }
@@ -537,6 +544,7 @@ public class MainActivitya extends AppCompatActivity {
                 IV2.setVisibility(View.VISIBLE);
                 repeat_audio_btn.setVisibility(View.INVISIBLE);
                 show_result_btn.setVisibility(View.INVISIBLE);
+                show_mouth_tech_btn.setVisibility(View.INVISIBLE);
                 if(fruitNo >= FruitChineseOrigin.size()-1){
                     fruitNo = 0; //超過題目位址,回到初始值}
                 }

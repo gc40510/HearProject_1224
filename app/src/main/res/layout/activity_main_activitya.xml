@@ -146,6 +146,17 @@
                 app:backgroundTint="@color/buttonyellow"
                 android:text="repeat" />
 
+            <Button
+                android:id="@+id/show_mouth_tech_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="140dp"
+                android:text="發音技巧"
+                android:textColor="@color/black"
+                android:visibility="invisible"
+                app:backgroundTint="@color/buttonyellow" />
+
         </FrameLayout>
         <Button
             android:layout_width="wrap_content"
@@ -169,10 +180,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginLeft="140dp"
-            android:visibility="invisible"
+            android:text="顯示結果"
             android:textColor="@color/black"
-            app:backgroundTint="@color/buttonyellow"
-            android:text="顯示結果" />
+            android:visibility="invisible"
+            app:backgroundTint="@color/buttonyellow" />
+
     </FrameLayout>
 
 
