@@ -89,6 +89,8 @@ import javax.net.ssl.X509TrustManager;
 
 import pl.droidsonroids.gif.GifImageView;
 
+import java.io.FileNotFoundException;
+
 
 public class MainActivitya extends AppCompatActivity {
 
@@ -278,7 +280,24 @@ public class MainActivitya extends AppCompatActivity {
                 standard_wav = resultjson.getString("standard");
                 server_DTW = resultjson.getString("dist");
                 diff = resultjson.getJSONObject("diff"); //注音部分的jsonobject
-            } catch (JSONException e) {
+
+                // 將 diff 儲存到檔案
+                File directory = new File(context.getFilesDir(), "custom_folder");
+                if (!directory.exists()) {
+                    directory.mkdirs(); // 創建資料夾
+                }
+                File file = new File(directory, "diff.json");
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(diff.toString().getBytes());
+                fos.close();
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace(); // 或者處理異常的邏輯
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (JSONException e) {
                 throw new RuntimeException(e);
             }
             //String[] result_words = result.split("<br>");
@@ -755,6 +774,83 @@ public class MainActivitya extends AppCompatActivity {
 
             }
         });
+        show_mouth_tech_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // 加載佈局文件
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                View alert = layoutInflater.inflate(R.layout.show_mouth_tech, null);
+
+                // 創建並顯示對話框
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setView(alert);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // 綁定佈局中的按鈕
+                Button btn_OK = (Button) alert.findViewById(R.id.OK2);
+                //發音技巧 result
+                TextView tv_result2 = (TextView)alert.findViewById(R.id.tv_result2);
+
+                // 為按鈕設定點擊事件
+                btn_OK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss(); // 關閉對話框
+                    }
+                });
+
+                // 在按鈕點擊後加入處理 diff 的功能
+                try {
+                    String diffStatus = diff.getString("status");
+                    String feedback = "";
+                    if (diffStatus.equals("all_correct")) {
+                        feedback = "每個字都很標準！";
+                        tv_result2.setText(feedback);
+                    } else if (diffStatus.equals("incorrect_count")) {
+                        feedback = "字數不對喔";
+                        tv_result2.setText(feedback);
+                    } else {
+                        JSONArray diffIncorrects = diff.getJSONArray("incorrect_pinyin");
+                        SpannableStringBuilder feedbackcolor = new SpannableStringBuilder();
+                        for (int i = 0; i < diffIncorrects.length(); i++) {
+                            JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
+                            String std_bpmf = diffIncorrect.getString("expected_bopomofo");
+                            String asr_bpmf = diffIncorrect.getString("actual_bopomofo");
+
+
+                            // 逐字比較 std_bpmf 和 asr_bpmf
+                            String[] stdWords = std_bpmf.split(""); // 按字母分隔單詞
+                            String[] asrWords = asr_bpmf.split("");
+
+                            for (int j = 0; j < stdWords.length; j++) {
+                                // 如果單詞不同，就顯示 std_bpmf 中的單詞
+                                if (j < asrWords.length && !stdWords[j].equals(asrWords[j])) {
+                                    feedbackcolor.append(stdWords[j]+ " "); // 顯示不匹配的單詞
+                                } else if(j < asrWords.length && stdWords[j].equals(asrWords[j])){
+                                    feedbackcolor.append(stdWords[j] + "!"); // 測試顯示內容
+                                }
+                                else if (j >= asrWords.length) {
+                                    feedbackcolor.append(stdWords[j] + " "); // 顯示缺失的單詞
+                                }
+                            }
+                        }
+                        tv_result2.setText(feedbackcolor);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // 設置 tv_title 的內容
+                //tv_title.setText(spannableStringBuilder);
+            }
+        });
+
+
+
+
+
 
     }
 
