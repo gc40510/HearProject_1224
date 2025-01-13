@@ -774,6 +774,9 @@ public class MainActivitya extends AppCompatActivity {
 
             }
         });
+        //發音技巧
+
+        //發音技巧按鈕
         show_mouth_tech_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -801,11 +804,11 @@ public class MainActivitya extends AppCompatActivity {
                     }
                 });
 
-                // 在按鈕點擊後加入處理 diff 的功能
+                String targetPinyin = "";
                 try {
-                    String diffStatus = diff.getString("status");
                     String feedback = "";
-                    if (diffStatus.equals("all_correct")) {
+                    String diffStatus = diff.getString("status");
+                    if (diffStatus.equals("all_correct")){
                         feedback = "每個字都很標準！";
                         tv_result2.setText(feedback);
                     } else if (diffStatus.equals("incorrect_count")) {
@@ -818,32 +821,26 @@ public class MainActivitya extends AppCompatActivity {
                             JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
                             String std_bpmf = diffIncorrect.getString("expected_bopomofo");
                             String asr_bpmf = diffIncorrect.getString("actual_bopomofo");
-
-
-                            // 逐字比較 std_bpmf 和 asr_bpmf
-                            String[] stdWords = std_bpmf.split(""); // 按字母分隔單詞
-                            String[] asrWords = asr_bpmf.split("");
-
-                            for (int j = 0; j < stdWords.length; j++) {
-                                // 如果單詞不同，就顯示 std_bpmf 中的單詞
-                                if (j < asrWords.length && !stdWords[j].equals(asrWords[j])) {
-                                    feedbackcolor.append(stdWords[j]+ " "); // 顯示不匹配的單詞
-                                } else if(j < asrWords.length && stdWords[j].equals(asrWords[j])){
-                                    feedbackcolor.append(stdWords[j] + "!"); // 測試顯示內容
-                                }
-                                else if (j >= asrWords.length) {
-                                    feedbackcolor.append(stdWords[j] + " "); // 顯示缺失的單詞
-                                }
-                            }
+                            //feedbackcolor.append(diffPinyinProcess2(std_bpmf,asr_bpmf));
+                            targetPinyin = diffPinyinProcess2(std_bpmf,asr_bpmf);
+                            //feedback += std_bpmf + "唸成" + asr_bpmf + "了\n";
                         }
-                        tv_result2.setText(feedbackcolor);
+                        //tv_result2.setText(targetPinyin);
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+                for(int i = 0;i < targetPinyin.length();i++) {
+                    char target = targetPinyin.charAt(i);
+                    String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(target);
+                    tv_result2.append("\n"+target+"發音錯誤\n"+"\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
+                }
+                //查詢正確發音技巧功能
+                //char targetPinyin = 'ㄅ'; // 測試的拼音符號
+                //String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(targetPinyin);
 
-                // 設置 tv_title 的內容
-                //tv_title.setText(spannableStringBuilder);
+                // 顯示拼音細節到介面
+                //tv_result2.append("發音錯誤"+"\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
             }
         });
 
@@ -853,6 +850,29 @@ public class MainActivitya extends AppCompatActivity {
 
 
     }
+    //比較字串並回傳
+    private String diffPinyinProcess2(String std_bpmf, String asr_bpmf) {
+        int lenstd = std_bpmf.length();
+        int lenasr = asr_bpmf.length();
+
+        // 若長度不同，回傳空字串
+        if (lenstd != lenasr) {
+            return std_bpmf;
+        } else {
+            StringBuilder diffChars = new StringBuilder();
+            for (int i = 0; i < lenstd; i++) {
+                char stdChar = std_bpmf.charAt(i);
+                char asrChar = asr_bpmf.charAt(i);
+                if (stdChar != asrChar) {
+                    diffChars.append(stdChar); // 儲存不同的字元
+                }
+            }
+            return diffChars.toString(); // 回傳儲存的不同字元
+        }
+    }
+
+
+
 
     private SpannableString diffPinyinProcess(String std_bpmf, String asr_bpmf){
         int lenstd = std_bpmf.length();
@@ -887,6 +907,10 @@ public class MainActivitya extends AppCompatActivity {
             return resultText;
         }
     }
+
+
+
+
 
     // 文檔讀入
     private String loadTextFile(InputStream inputStream) throws IOException {
