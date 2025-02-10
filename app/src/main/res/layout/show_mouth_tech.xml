@@ -3,10 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"> <!-- 內邊距，確保內容不會緊貼邊界 -->
+
+        <!-- 上方文字區塊 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -15,18 +19,24 @@
 
             <TextView
                 android:id="@+id/tv_result2"
-                android:layout_width="wrap_content"
-                android:layout_height="643dp"
-                android:layout_weight="1"
-                android:text="TextView"
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:padding="16dp"
+                android:text=""
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <!-- 按鈕區塊 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="bottom|end">
+            android:gravity="end|bottom"> <!-- 按鈕居右下角 -->
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,4 +48,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

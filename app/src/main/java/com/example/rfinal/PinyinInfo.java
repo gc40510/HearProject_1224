@@ -19,10 +19,10 @@ public class PinyinInfo {
         pinyinDetails.put('ㄍ', new String[]{"舌根與軟顎", "舌根接觸軟顎，嘴巴微開，發音時氣流從舌根與軟顎之間爆發，像英文的 /g/。"});
         pinyinDetails.put('ㄎ', new String[]{"舌根與軟顎", "舌根接觸軟顎，嘴巴微開，發音時強烈的氣流從口腔內部爆發，像英文的 /k/。"});
         pinyinDetails.put('ㄏ', new String[]{"喉部", "舌頭放鬆，氣流從喉部發出，嘴巴微開，像英文的 /h/。"});
-        pinyinDetails.put('ㄐ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，發音時舌頭迅速離開，氣流爆發，像英文的 /j/（例如 \"jump\"）。"});
+        pinyinDetails.put('ㄐ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，發音時舌頭迅速離開，氣流爆發，像英文的 /j/。"});
         pinyinDetails.put('ㄑ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，發音時需要強烈的氣流，嘴唇微圓，像英文的 /ch/。"});
         pinyinDetails.put('ㄒ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，嘴唇微微拉開，發音時氣流迅速擠出，像英文的 /sh/。"});
-        pinyinDetails.put('ㄓ', new String[]{"舌尖與硬顎", "舌尖輕觸硬顎，氣流從舌頭兩側擠出，像英文的 /zh/（例如 \"measure\"）。"});
+        pinyinDetails.put('ㄓ', new String[]{"舌尖與硬顎", "舌尖輕觸硬顎，氣流從舌頭兩側擠出，像英文的 /zh/。"});
         pinyinDetails.put('ㄔ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，發音時氣流從舌頭兩側強烈擠出，嘴型圓形，像英文的 /ch/。"});
         pinyinDetails.put('ㄕ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，嘴巴微微張開，發音時氣流從舌頭兩側流出，像英文的 /sh/。"});
         pinyinDetails.put('ㄖ', new String[]{"舌尖與硬顎", "舌尖接觸硬顎，舌尖稍微捲起，氣流從舌頭兩側流出，像英文的 /r/。"});

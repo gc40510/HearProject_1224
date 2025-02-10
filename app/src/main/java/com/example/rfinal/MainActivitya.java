@@ -90,7 +90,10 @@ import javax.net.ssl.X509TrustManager;
 import pl.droidsonroids.gif.GifImageView;
 
 import java.io.FileNotFoundException;
-
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivitya extends AppCompatActivity {
 
@@ -777,6 +780,7 @@ public class MainActivitya extends AppCompatActivity {
         //發音技巧
 
         //發音技巧按鈕
+
         show_mouth_tech_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -817,24 +821,38 @@ public class MainActivitya extends AppCompatActivity {
                     } else {
                         JSONArray diffIncorrects = diff.getJSONArray("incorrect_pinyin");
                         SpannableStringBuilder feedbackcolor = new SpannableStringBuilder();
+                        // 創建 SpannableStringBuilder 來儲存所有拼音資訊
+                        SpannableStringBuilder tech_result = new SpannableStringBuilder();
                         for (int i = 0; i < diffIncorrects.length(); i++) {
                             JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
                             String std_bpmf = diffIncorrect.getString("expected_bopomofo");
                             String asr_bpmf = diffIncorrect.getString("actual_bopomofo");
                             //feedbackcolor.append(diffPinyinProcess2(std_bpmf,asr_bpmf));
                             targetPinyin = diffPinyinProcess2(std_bpmf,asr_bpmf);
+                            for (int j = 0; j < targetPinyin.length(); j++) {
+                                char target = targetPinyin.charAt(j);
+                                String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(target);
+                                // 創建 SpannableString 來處理文本的樣式
+                                SpannableString spannableString = new SpannableString("\n" + target + "發音錯誤" + "\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
+
+                                // 設置錯誤單詞的顏色與大小
+                                String targetString = String.valueOf(target);
+                                spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, targetString.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, targetString.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                // 將處理過的文本添加到 TextView
+                                tech_result.append(spannableString);
+                            }
                             //feedback += std_bpmf + "唸成" + asr_bpmf + "了\n";
                         }
-                        //tv_result2.setText(targetPinyin);
+                        // 將結果顯示到 TextView
+                        tv_result2.setText(tech_result);
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                for(int i = 0;i < targetPinyin.length();i++) {
-                    char target = targetPinyin.charAt(i);
-                    String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(target);
-                    tv_result2.append("\n"+target+"發音錯誤\n"+"\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
-                }
+
+
                 //查詢正確發音技巧功能
                 //char targetPinyin = 'ㄅ'; // 測試的拼音符號
                 //String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(targetPinyin);
