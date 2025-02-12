@@ -205,13 +205,6 @@ public class MainActivity<fontType> extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        TB21.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(MainActivity.this  ,  MainActivityc.class);
-                startActivity(intent);
-            }
-        });
         TB22.setOnClickListener(new View.OnClickListener() {
 
             @Override

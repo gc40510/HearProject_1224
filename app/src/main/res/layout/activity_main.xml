@@ -159,7 +159,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textColor="@color/black"
-                                android:text="練習\n紀錄"
+                                android:text="聲調\n分析"
                                 android:textSize="30sp"
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginLeft="12dp">

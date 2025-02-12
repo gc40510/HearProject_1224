@@ -831,7 +831,7 @@ public class MainActivitya extends AppCompatActivity {
                             targetPinyin = diffPinyinProcess2(std_bpmf,asr_bpmf);
                             for (int j = 0; j < targetPinyin.length(); j++) {
                                 char target = targetPinyin.charAt(j);
-                                String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(target);
+                                String[] details = com.example.rfinal.PinyinInfo.getPinyinDetails(target);
                                 // 創建 SpannableString 來處理文本的樣式
                                 SpannableString spannableString = new SpannableString("\n" + target + "發音錯誤" + "\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
 
@@ -861,7 +861,7 @@ public class MainActivitya extends AppCompatActivity {
                 //tv_result2.append("發音錯誤"+"\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
             }
         });
-
+        //新增錄製4個音檔的button
 
 
 
@@ -1483,4 +1483,7 @@ class AudioTransformer {
 
         return stftMatrix;
     }
+}
+class pitch_comparison{
+
 }
