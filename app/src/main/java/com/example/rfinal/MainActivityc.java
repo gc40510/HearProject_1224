@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,10 +45,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 public class MainActivityc extends AppCompatActivity {
 
     private Button btnRecord, btnSave, btnCompare,btnStop;
+    private TextView txtResult2;
     private MediaRecorder mediaRecorder;
     private Recorder recorder;
     private List<File> audioFiles = new ArrayList<>(); // 儲存錄製的四個音檔
     private int currentRecordingIndex = 0; // 當前錄製的音檔索引
+    private int currentRecordingIndex2 = 0; //紀錄顯示音調到幾聲
     private ProgressDialog progressDialog;
 
     HostnameVerifier hostnameVerifier = (hostname, session) -> true;
@@ -62,6 +65,9 @@ public class MainActivityc extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save);
         btnStop = findViewById(R.id.btn_stop);
         btnCompare = findViewById(R.id.btn_compare);
+
+        // 綁定 TextView
+        txtResult2 = findViewById(R.id.txt_result2);
 
         // 設置錄音按鈕點擊事件
         btnRecord.setOnClickListener(new View.OnClickListener() {
@@ -82,28 +88,37 @@ public class MainActivityc extends AppCompatActivity {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentRecordingIndex2 < 3) {
+                    // 根據索引顯示要錄製的音調
+                    String[] tones = {"ㄅㄚ (第二聲)", "ㄅㄚ (第三聲)", "ㄅㄚ (第四聲)"};
+                    txtResult2.setText("錄製的音調: " + tones[currentRecordingIndex2]);
+                } else {
+                    Toast.makeText(MainActivityc.this, "erro", Toast.LENGTH_SHORT).show();
+                }
+                currentRecordingIndex2++;
                 stopRecording();
+
                 btnRecord.setEnabled(true);  // 允許再次錄音
                 btnStop.setEnabled(false);   // 停止錄音後禁用按鈕
             }
         });
 
         // 設置保存按鈕點擊事件
+        // 設置保存按鈕點擊事件
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (audioFiles.size() == 4) {
-                    uploadAudioFiles();
+                    // 提供上傳的 API URL
+                    new UploadTask("https://140.125.45.132:414/call2").execute(audioFiles);
 
-                    // 獲取 ImageView
+                    // 將圖片載入 ImageView
                     ImageView imgPitchContour = findViewById(R.id.img_pitch_contour);
-
-                    // 使用 Glide 載入圖片
                     String imageUrl = "https://140.125.45.132:414/get_image2";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
-                            .skipMemoryCache(true)  // 避免載入快取
-                            .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁碟快取
+                            .skipMemoryCache(true)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imgPitchContour);
 
                     Toast.makeText(MainActivityc.this, "圖片已載入", Toast.LENGTH_SHORT).show();
@@ -114,11 +129,37 @@ public class MainActivityc extends AppCompatActivity {
         });
 
 
+
+        // 設置比較按鈕點擊事件（可選）
         // 設置比較按鈕點擊事件（可選）
         btnCompare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 實現比較邏輯
+                if (audioFiles.size() == 4) {
+                    // 使用新的 URL 上傳音檔
+                    new UploadTask("https://140.125.45.132:414/call3").execute(audioFiles);
+
+                    // 獲取 ImageView
+                    ImageView imgPitchContour2 = findViewById(R.id.img_pitch_contour2);
+                    ImageView imgPitchContour = findViewById(R.id.img_pitch_contour);
+                    // 使用 Glide 載入圖片
+                    String imageUrl = "https://140.125.45.132:414/get_image2";
+                    Glide.with(MainActivityc.this)
+                            .load(imageUrl)
+                            .skipMemoryCache(true)  // 避免載入快取
+                            .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁碟快取
+                            .into(imgPitchContour);
+                    imageUrl = "https://140.125.45.132:414/get_image3";
+                    Glide.with(MainActivityc.this)
+                            .load(imageUrl)
+                            .skipMemoryCache(true)  // 避免載入快取
+                            .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁碟快取
+                            .into(imgPitchContour2);
+
+                    Toast.makeText(MainActivityc.this, "圖片已載入", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivityc.this, "請先錄製四個音檔", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -179,17 +220,19 @@ public class MainActivityc extends AppCompatActivity {
     }
 
     // 上傳音檔到 Flask 伺服器
-    private void uploadAudioFiles() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("上傳中");
-        progressDialog.setMessage("正在上傳音檔...");
-        progressDialog.show();
 
-        new UploadTask().execute(audioFiles);
-    }
+
 
     // 上傳任務
+    // 上傳任務
     private class UploadTask extends AsyncTask<List<File>, Void, String> {
+        private String apiUrl;
+
+        // 構造函數，接受自定義的 URL
+        public UploadTask(String apiUrl) {
+            this.apiUrl = apiUrl;
+        }
+
         @Override
         protected String doInBackground(List<File>... files) {
             try {
@@ -197,10 +240,10 @@ public class MainActivityc extends AppCompatActivity {
                 SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, trustAllCertificates, null);
 
-                URL apiUrl = new URL("https://140.125.45.132:414/call2");
+                URL url = new URL(apiUrl); // 使用傳入的 URL
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
                 HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-                HttpsURLConnection connection = (HttpsURLConnection) apiUrl.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
                 // 设置请求方法为POST
                 connection.setRequestMethod("POST");
@@ -232,7 +275,6 @@ public class MainActivityc extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
             Toast.makeText(MainActivityc.this, result, Toast.LENGTH_SHORT).show();
         }
     }

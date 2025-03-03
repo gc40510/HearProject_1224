@@ -925,7 +925,25 @@ public class MainActivitya extends AppCompatActivity {
             return resultText;
         }
     }
+    //台語比較
+    private SpannableString diffTailoProcess(String std_tailo, String asr_tailo) {
+        int lenstd = std_tailo.length();
+        int lenasr = asr_tailo.length();
+        SpannableString resultText = new SpannableString(std_tailo + " 發成 " + asr_tailo + " 了\n");
 
+        if (lenstd != lenasr) {
+            return resultText;
+        } else {
+            for (int i = 0; i < lenstd; i++) {
+                char stdChar = std_tailo.charAt(i);
+                char asrChar = asr_tailo.charAt(i);
+                if (stdChar != asrChar) {
+                    resultText.setSpan(new ForegroundColorSpan(Color.RED), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            return resultText;
+        }
+    }
 
 
 
