@@ -110,11 +110,11 @@ public class MainActivityc extends AppCompatActivity {
             public void onClick(View v) {
                 if (audioFiles.size() == 4) {
                     // 提供上傳的 API URL
-                    new UploadTask("https://140.125.45.132:414/call2").execute(audioFiles);
+                    new UploadTask("https://140.125.45.129:412/call2").execute(audioFiles);
 
                     // 將圖片載入 ImageView
                     ImageView imgPitchContour = findViewById(R.id.img_pitch_contour);
-                    String imageUrl = "https://140.125.45.132:414/get_image2";
+                    String imageUrl = "https://140.125.45.129:412/get_image2";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
                             .skipMemoryCache(true)
@@ -137,19 +137,19 @@ public class MainActivityc extends AppCompatActivity {
             public void onClick(View v) {
                 if (audioFiles.size() == 4) {
                     // 使用新的 URL 上傳音檔
-                    new UploadTask("https://140.125.45.132:414/call3").execute(audioFiles);
+                    new UploadTask("https://140.125.45.129:412/call3").execute(audioFiles);
 
                     // 獲取 ImageView
                     ImageView imgPitchContour2 = findViewById(R.id.img_pitch_contour2);
                     ImageView imgPitchContour = findViewById(R.id.img_pitch_contour);
                     // 使用 Glide 載入圖片
-                    String imageUrl = "https://140.125.45.132:414/get_image2";
+                    String imageUrl = "https://140.125.45.129:412/get_image2";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
                             .skipMemoryCache(true)  // 避免載入快取
                             .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁碟快取
                             .into(imgPitchContour);
-                    imageUrl = "https://140.125.45.132:414/get_image3";
+                    imageUrl = "https://140.125.45.129:412/get_image3";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
                             .skipMemoryCache(true)  // 避免載入快取

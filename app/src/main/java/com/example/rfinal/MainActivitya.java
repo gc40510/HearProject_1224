@@ -344,7 +344,7 @@ public class MainActivitya extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String theme = bundle.getString("theme");
         Map<String, String> thememap = new HashMap<>();
-        thememap.put("綜合", "george.txt"); //改成自己錄的音檔
+        thememap.put("綜合", "george2.txt"); //改成自己錄的音檔
         thememap.put("水果", "fruit.txt");
         thememap.put("動物", "animal.txt");
         thememap.put("日常用品", "daily.txt");
@@ -517,7 +517,7 @@ public class MainActivitya extends AppCompatActivity {
                         progressDialog.show();
 
 
-                        NetworkRequestTask networkRequestTask = new NetworkRequestTask("https://140.125.45.132:414/call",
+                        NetworkRequestTask networkRequestTask = new NetworkRequestTask("https://140.125.45.129:412/call",
                                 firebase_nowwavname_ch, firebase_nowwavname, audio_file);
                         networkRequestTask.execute();
                         
@@ -625,6 +625,7 @@ public class MainActivitya extends AppCompatActivity {
                 Map<String, List<String>> ans = dtw.dtw(target, refrence);
                 Map<String, Integer> count = new HashMap<String, Integer>();
                 String[] state = new String[target.length/2];
+                /* 功能跟下面重複了
                 for(int i=0;i<state.length;i++){
                     state[i] = "ok";
                 }
@@ -690,7 +691,9 @@ public class MainActivitya extends AppCompatActivity {
                         feedback += "\""+word[i]+"\"" + "發的很標準\n";
                     }
                 }
-
+                 */
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(FruitChinese.get(fruitNo));
+                String feedback = "";
                 //處理回傳的json中的diff
                 feedback = "";
                 try {
@@ -706,8 +709,11 @@ public class MainActivitya extends AppCompatActivity {
                         SpannableStringBuilder feedbackcolor = new SpannableStringBuilder();
                         for (int i = 0; i < diffIncorrects.length(); i++) {
                             JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
-                            String std_bpmf = diffIncorrect.getString("expected_bopomofo");
-                            String asr_bpmf = diffIncorrect.getString("actual_bopomofo");
+                            //String std_bpmf = diffIncorrect.getString("expected_bopomofo");
+                            String std_bpmf = diffIncorrect.getString("expected_tailo");
+                            //String asr_bpmf = diffIncorrect.getString("actual_bopomofo");
+                            String asr_bpmf = diffIncorrect.getString("actual_tailo");
+
                             feedbackcolor.append(diffPinyinProcess(std_bpmf,asr_bpmf));
                             //feedback += std_bpmf + "唸成" + asr_bpmf + "了\n";
                         }
