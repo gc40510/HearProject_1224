@@ -109,6 +109,15 @@ public class tailoInfo {
         // 聲化韻母
         taiLoDetails.put("m", new String[]{"聲化韻母", "雙唇閉合，氣流經鼻腔發出"});
         taiLoDetails.put("ng", new String[]{"聲化韻母", "舌根貼軟顎，氣流經鼻腔發出"});
+        // ================= 新增：聲調發音技巧 =================
+        taiLoDetails.put("1", new String[]{"陰平", "高平調：保持高音，像國語第一聲「媽」"});
+        taiLoDetails.put("2", new String[]{"陰上", "高降調：先高後低，像國語「馬」的開頭"});
+        taiLoDetails.put("3", new String[]{"陰去", "低降調：像嘆氣「唉～」的下降感"});
+        taiLoDetails.put("4", new String[]{"陰入", "短促中平：急促停頓，像「一」的結尾"});
+        taiLoDetails.put("5", new String[]{"陽平", "中升調：由中音上揚，像國語「麻」但更明顯"});
+        taiLoDetails.put("6", new String[]{"陽上", "低平調：低沉平穩，像「啊～」的低音"});
+        taiLoDetails.put("7", new String[]{"陽去", "中平調：像國語輕聲「嗎」，但稍長"});
+        taiLoDetails.put("8", new String[]{"陽入", "高短調：短促高音，像突然喊「喔！」"});
     }
 
     public static String[] getTaiLoDetails(String syllable) {

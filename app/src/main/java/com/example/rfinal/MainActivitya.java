@@ -942,6 +942,20 @@ public class MainActivitya extends AppCompatActivity {
                                             .append("\n舌頭和嘴型: ").append(vowelDetails[1]);
                                 }
                             }
+                            // 處理聲調差異
+                            String toneDiff = targetPinyin.split(",")[2].trim();
+                            // 處理聲調差異（新增部分）
+                            if (!toneDiff.isEmpty()) {
+                                String[] tones = toneDiff.split(" ");
+                                for (String tone : tones) {
+                                    String[] toneDetails =com.example.rfinal.tailoInfo.getTaiLoDetails(tone); // 取得聲調的發音技巧
+                                    tech_result.append("\n").append(tone).append("發音錯誤")
+                                            .append("\n發音部位: ").append(toneDetails[0])
+                                            .append("\n舌頭和嘴型: ").append(toneDetails[1]);
+                                }
+                            }
+
+
                         }
                         tv_result2.setText(tech_result.toString());
                     }
@@ -988,21 +1002,32 @@ public class MainActivitya extends AppCompatActivity {
 
         String consonantDiff = "";
         String vowelDiff = "";
+        String toneDiff = "";
 
-        // 比較聲母和韻母，對每個單詞分別處理
+        // 比較聲母、韻母和聲調，對每個單詞分別處理
         for (int i = 0; i < stdParts.length; i++) {
             // 比較聲母
             if (!stdParts[i][0].equals(asrParts[i][0])) {
                 consonantDiff += stdParts[i][0] + " "; // 若不同，記錄標準發音的聲母
             }
 
-            // 比較韻母
-            if (!stdParts[i][1].equals(asrParts[i][1])) {
-                vowelDiff += stdParts[i][1] + " "; // 若不同，記錄標準發音的韻母
+            // 比較韻母（不含聲調）
+            String stdVowel = stdParts[i][1].replaceAll("[0-9]", "");
+            String asrVowel = asrParts[i][1].replaceAll("[0-9]", "");
+            if (!stdVowel.equals(asrVowel)) {
+                vowelDiff += stdVowel + " ";   // 若不同，記錄標準發音的韻母（不含聲調）
+               // vowelDiff += stdParts[i][1] + " "; // 若不同，記錄標準發音的韻母（含聲調）
+            }
+
+            // 比較聲調
+            String stdTone = stdParts[i][1].replaceAll("[^0-9]", "");
+            String asrTone = asrParts[i][1].replaceAll("[^0-9]", "");
+            if (!stdTone.equals(asrTone)) {
+                toneDiff += stdTone + " "; // 若不同，記錄標準發音的聲調
             }
         }
 
-        return new String[]{consonantDiff.trim(), vowelDiff.trim()};
+        return new String[]{consonantDiff.trim(), vowelDiff.trim(), toneDiff.trim()};
     }
 
 
