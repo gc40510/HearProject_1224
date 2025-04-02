@@ -35,7 +35,8 @@ public class MainActivity<fontType> extends AppCompatActivity {
     Button btn_agreement,resetbutton; // show agreement
     int consentAgree = 0; // 0 -> user not agree using agreement, 1 -> user agree using agreement
     boolean activityFlag = false;
-
+    //中文,台語 語言選擇
+    String selectedLanguage = "chinese"; // 默認中文
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -177,12 +178,19 @@ public class MainActivity<fontType> extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("請選擇您的課程");
-                String items[] = {"綜合","水果", "動物", "日常用品"}; //-1代表沒有條目被選中 綜合改george
+                String items[] = {"中文","台語", "動物", "日常用品"}; //-1代表沒有條目被選中 綜合改george
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 1.把選中的條目取出來
                         String item = items[which];
+                        // 根據選擇設定語言
+                        if (item.equals("中文")) {
+                            selectedLanguage = "chinese";
+                        } else if (item.equals("台語")) {
+                            selectedLanguage = "tailo";
+                        }
+
                         Toast.makeText(getApplicationContext(),item.toString(),Toast.LENGTH_LONG).show();
                         // 2.然後把對話框關閉
                         dialog.dismiss();
@@ -190,6 +198,7 @@ public class MainActivity<fontType> extends AppCompatActivity {
 //                        Intent intent =new Intent(MainActivity.this  ,  MainActivity2.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("theme", item);
+                        bundle.putString("language", selectedLanguage); // 傳遞語言選擇
                         intent.putExtras(bundle);
 //
                         startActivity(intent);

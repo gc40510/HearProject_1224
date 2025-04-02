@@ -9,13 +9,23 @@
     android:orientation="vertical"
     android:background="#e7dfd8">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/aIV3"
-        android:background="@drawable/clockbackground"/>
+    <!-- 新增頂部工具列，包含語言選擇和時鐘圖標 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+        <!-- 原有的時鐘圖標 -->
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/aIV3"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/clockbackground"/>
+    </LinearLayout>
 
-
+    <!-- 以下是原有的佈局內容 -->
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="240sp"
@@ -28,7 +38,6 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white"
             android:textSize="20sp"/>
-
 
         <ImageView
             android:id="@+id/aIV1"
@@ -59,9 +68,7 @@
                 android:checked="true"
                 android:text="個人化調整"
                 android:textColor="#FFFFFF" />
-
         </RadioGroup>
-
 
         <TextView
             android:id="@+id/aTV1"
@@ -77,6 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="音調圖" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,6 +100,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/Ta1"/>
     </LinearLayout>
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -101,6 +110,7 @@
             android:background="@drawable/desk"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginTop="200dp"/>
+
         <FrameLayout
             android:layout_width="400dp"
             android:layout_height="300dp"
@@ -117,7 +127,6 @@
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="24dp"/>
-<!--            </pl.droidsonroids.gif.GifImageView>-->
 
             <Button
                 android:id="@+id/aBT3"
@@ -156,8 +165,8 @@
                 android:textColor="@color/black"
                 android:visibility="invisible"
                 app:backgroundTint="@color/buttonyellow" />
-
         </FrameLayout>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -166,6 +175,7 @@
             android:text="上一題"
             android:id="@+id/aBT1"
             android:visibility="invisible" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -184,8 +194,5 @@
             android:textColor="@color/black"
             android:visibility="invisible"
             app:backgroundTint="@color/buttonyellow" />
-
     </FrameLayout>
-
-
 </LinearLayout>
