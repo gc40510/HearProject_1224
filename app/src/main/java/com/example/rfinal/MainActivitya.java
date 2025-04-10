@@ -935,10 +935,11 @@ public class MainActivitya extends AppCompatActivity {
     }
     //發音技巧
     private void processChinesePronunciation(TextView tv_result2) {
+        String targetPinyin = "";
         try {
             String feedback = "";
             String diffStatus = diff.getString("status");
-            if (diffStatus.equals("all_correct")) {
+            if (diffStatus.equals("all_correct")){
                 feedback = "每個字都很標準！";
                 tv_result2.setText(feedback);
             } else if (diffStatus.equals("incorrect_count")) {
@@ -946,58 +947,45 @@ public class MainActivitya extends AppCompatActivity {
                 tv_result2.setText(feedback);
             } else {
                 JSONArray diffIncorrects = diff.getJSONArray("incorrect_pinyin");
-                StringBuilder tech_result = new StringBuilder();
+                SpannableStringBuilder feedbackcolor = new SpannableStringBuilder();
+                // 創建 SpannableStringBuilder 來儲存所有拼音資訊
+                SpannableStringBuilder tech_result = new SpannableStringBuilder();
                 for (int i = 0; i < diffIncorrects.length(); i++) {
                     JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
-                    String std_bpmf = diffIncorrect.getString("expected_tailo");
-                    String asr_bpmf = diffIncorrect.getString("actual_tailo");
+                    String std_bpmf = diffIncorrect.getString("expected_bopomofo");
+                    String asr_bpmf = diffIncorrect.getString("actual_bopomofo");
+                    //feedbackcolor.append(diffPinyinProcess2(std_bpmf,asr_bpmf));
+                    targetPinyin = diffPinyinProcess2(std_bpmf,asr_bpmf);
+                    for (int j = 0; j < targetPinyin.length(); j++) {
+                        char target = targetPinyin.charAt(j);
+                        String[] details = com.example.rfinal.PinyinInfo.getPinyinDetails(target);
+                        // 創建 SpannableString 來處理文本的樣式
+                        SpannableString spannableString = new SpannableString("\n" + target + "發音錯誤" + "\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
 
-                    String targetPinyin = Arrays.toString(diffTailoProcess2(std_bpmf, asr_bpmf));
-                    targetPinyin = targetPinyin.replace("[", "").replace("]", "").trim();
+                        // 設置錯誤單詞的顏色與大小
+                        String targetString = String.valueOf(target);
+                        spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, targetString.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, targetString.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    // 處理聲母差異
-                    String consonantDiff = targetPinyin.split(",")[0].trim();
-                    if (!consonantDiff.isEmpty()) {
-                        String[] consonants = consonantDiff.split(" ");
-                        for (String consonant : consonants) {
-                            String[] consonantDetails = tailoInfo.getTaiLoDetails(consonant);
-                            tech_result.append("\n").append(consonant).append("發音錯誤")
-                                    .append("\n發音部位: ").append(consonantDetails[0])
-                                    .append("\n舌頭和嘴型: ").append(consonantDetails[1]);
-                        }
+                        // 將處理過的文本添加到 TextView
+                        tech_result.append(spannableString);
                     }
-
-                    // 處理韻母差異
-                    String vowelDiff = targetPinyin.split(",")[1].trim();
-                    if (!vowelDiff.isEmpty()) {
-                        String[] vowels = vowelDiff.split(" ");
-                        for (String vowel : vowels) {
-                            String[] vowelDetails = tailoInfo.getTaiLoDetails(vowel);
-                            tech_result.append("\n").append(vowel).append("發音錯誤")
-                                    .append("\n發音部位: ").append(vowelDetails[0])
-                                    .append("\n舌頭和嘴型: ").append(vowelDetails[1]);
-                        }
-                    }
-                    // 處理聲調差異
-                    String toneDiff = targetPinyin.split(",")[2].trim();
-                    // 處理聲調差異（新增部分）
-                    if (!toneDiff.isEmpty()) {
-                        String[] tones = toneDiff.split(" ");
-                        for (String tone : tones) {
-                            String[] toneDetails = tailoInfo.getTaiLoDetails(tone); // 取得聲調的發音技巧
-                            tech_result.append("\n").append(tone).append("發音錯誤")
-                                    .append("\n發音部位: ").append(toneDetails[0])
-                                    .append("\n舌頭和嘴型: ").append(toneDetails[1]);
-                        }
-                    }
-
-
+                    //feedback += std_bpmf + "唸成" + asr_bpmf + "了\n";
                 }
-                tv_result2.setText(tech_result.toString());
+                // 將結果顯示到 TextView
+                tv_result2.setText(tech_result);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+
+        //查詢正確發音技巧功能
+        //char targetPinyin = 'ㄅ'; // 測試的拼音符號
+        //String[] details = com.example.myapp.utils.PinyinInfo.getPinyinDetails(targetPinyin);
+
+        // 顯示拼音細節到介面
+        //tv_result2.append("發音錯誤"+"\n發音部位: " + details[0] + "\n舌頭和嘴型: " + details[1]);
     }
 
     private void processTaiwanesePronunciation(TextView tv_result2) {
@@ -1012,7 +1000,7 @@ public class MainActivitya extends AppCompatActivity {
                 tv_result2.setText(feedback);
             } else {
                 JSONArray diffIncorrects = diff.getJSONArray("incorrect_pinyin");
-                StringBuilder tech_result = new StringBuilder();
+                SpannableStringBuilder tech_result = new SpannableStringBuilder();
                 for (int i = 0; i < diffIncorrects.length(); i++) {
                     JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
                     String std_tailo = diffIncorrect.getString("expected_tailo");
@@ -1021,48 +1009,62 @@ public class MainActivitya extends AppCompatActivity {
                     String targetPinyin = Arrays.toString(diffTailoProcess2(std_tailo, asr_tailo))
                             .replace("[", "").replace("]", "").trim();
 
-                    // 處理聲母差異
                     String consonantDiff = targetPinyin.split(",")[0].trim();
+                    String vowelDiff = targetPinyin.split(",")[1].trim();
+                    String toneDiff = targetPinyin.split(",")[2].trim();
+
+                    // 逐個錯誤符號處理：聲母
                     if (!consonantDiff.isEmpty()) {
                         String[] consonants = consonantDiff.split(" ");
                         for (String consonant : consonants) {
                             String[] consonantDetails = tailoInfo.getTaiLoDetails(consonant);
-                            tech_result.append("\n").append(consonant).append("發音錯誤")
-                                    .append("\n發音部位: ").append(consonantDetails[0])
-                                    .append("\n舌頭和嘴型: ").append(consonantDetails[1]);
+                            SpannableString spannableString = new SpannableString(
+                                    "\n" + consonant + "發音錯誤\n發音部位: " + consonantDetails[0] + "\n舌頭和嘴型: " + consonantDetails[1]);
+
+                            // 標紅
+                            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, consonant.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, consonant.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            tech_result.append(spannableString);
                         }
                     }
 
-                    // 處理韻母差異
-                    String vowelDiff = targetPinyin.split(",")[1].trim();
+                    // 逐個錯誤符號處理：韻母
                     if (!vowelDiff.isEmpty()) {
                         String[] vowels = vowelDiff.split(" ");
                         for (String vowel : vowels) {
                             String[] vowelDetails = tailoInfo.getTaiLoDetails(vowel);
-                            tech_result.append("\n").append(vowel).append("發音錯誤")
-                                    .append("\n發音部位: ").append(vowelDetails[0])
-                                    .append("\n舌頭和嘴型: ").append(vowelDetails[1]);
+                            SpannableString spannableString = new SpannableString(
+                                    "\n" + vowel + "發音錯誤\n發音部位: " + vowelDetails[0] + "\n舌頭和嘴型: " + vowelDetails[1]);
+
+                            // 標紅
+                            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, vowel.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, vowel.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            tech_result.append(spannableString);
                         }
                     }
 
-                    // 處理聲調差異
-                    String toneDiff = targetPinyin.split(",")[2].trim();
+                    // 逐個錯誤符號處理：聲調
                     if (!toneDiff.isEmpty()) {
                         String[] tones = toneDiff.split(" ");
                         for (String tone : tones) {
                             String[] toneDetails = tailoInfo.getTaiLoDetails(tone);
-                            tech_result.append("\n").append(tone).append("發音錯誤")
-                                    .append("\n發音部位: ").append(toneDetails[0])
-                                    .append("\n舌頭和嘴型: ").append(toneDetails[1]);
+                            SpannableString spannableString = new SpannableString(
+                                    "\n" + tone + "聲 發音錯誤\n漢語調類: " + toneDetails[0] + "\n發音技巧-: " + toneDetails[1]);
+
+                            // 標紅
+                            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, tone.length() + 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, tone.length() + 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            tech_result.append(spannableString);
                         }
                     }
                 }
-                tv_result2.setText(tech_result.toString());
+                tv_result2.setText(tech_result);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 
 
