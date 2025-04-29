@@ -14,27 +14,47 @@
         android:roundIcon="@drawable/dinasour"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rfinal">
+
+        <!-- MainActivity2 should be non-exported -->
         <activity
             android:name=".MainActivity2"
             android:exported="false" />
+
+        <!-- FreqLinearMapping should be non-exported -->
         <activity
             android:name=".FreqLinearMapping"
             android:exported="false" />
+
+        <!-- PreTestPage should be non-exported -->
         <activity
             android:name=".PreTestPage"
             android:exported="false" />
-        <activity android:name=".MainActivitye" />
-        <activity android:name=".MainActivityd" />
-        <activity android:name=".MainActivityc" />
-        <activity android:name=".MainActivityb" />
-        <activity android:name=".MainActivitya" />
-        <activity android:name=".MainActivity">
+
+        <!-- Non-exported activities (no intent-filter) -->
+        <activity
+            android:name=".MainActivitye"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivityd"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivityc"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivityb"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivitya"
+            android:exported="false" />
+
+        <!-- MainActivity should be exported as it has intent-filter -->
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

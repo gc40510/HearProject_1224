@@ -107,6 +107,10 @@ public class MainActivitya extends AppCompatActivity {
 
     private int fruitNo = 0;
     // 儲存現在的題目編號
+    //答題次數記錄
+    private int totalCorrect = 0;
+    private int totalQuestions = 0;
+
 
 
     // 題目
@@ -140,6 +144,10 @@ public class MainActivitya extends AppCompatActivity {
     //矯正語言選擇
     RadioGroup languageGroup;
     RadioButton radioChinese, radioTailo;
+
+    //答題次數
+    TextView scoreTextView;
+
 
 
     TextView TV1;
@@ -283,9 +291,15 @@ public class MainActivitya extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-            // 处理响应数据，例如更新UI
-            Log.d("HTTP Request", result);
+            if (result == null) {
+                Log.e("HTTP Request", "Response is null (server error or network issue)");
+                progressDialog.dismiss();
+                Toast.makeText(context, "伺服器請求失敗，請檢查網路", Toast.LENGTH_SHORT).show();
+                return; // 提前返回，避免後續操作
+            }
             try {
+                // 处理响应数据，例如更新UI
+                Log.d("HTTP Request", result);
                 JSONObject resultjson = new JSONObject(result);
                 user_wav = resultjson.getString("kaldi");
                 standard_wav = resultjson.getString("standard");
@@ -379,6 +393,8 @@ public class MainActivitya extends AppCompatActivity {
         IV3.setImageDrawable(getResources().getDrawable(R.drawable.clockbackground));
         img_pad.setImageDrawable(getResources().getDrawable(R.drawable.pad));
         T1 = findViewById(R.id.Ta1);
+        scoreTextView = findViewById(R.id.scoreTextView);
+
 
 
         bb = findViewById(R.id.bbb);
@@ -655,6 +671,7 @@ public class MainActivitya extends AppCompatActivity {
                     if (diffStatus.equals("all_correct")){
                         feedback = "每個字都很標準！";
                         tv_result.setText(feedback);
+                        totalCorrect++; // 答對加一
                     } else if (diffStatus.equals("incorrect_count")) {
                         feedback = "字數不對喔";
                         tv_result.setText(feedback);
@@ -675,9 +692,11 @@ public class MainActivitya extends AppCompatActivity {
                                 feedbackcolor.append(diffPinyinProcess(std_bpmf, asr_bpmf));
                             }
                         }
-
                         tv_result.setText(feedbackcolor);
                     }
+                    totalQuestions++;
+                    // 更新顯示內容
+                    scoreTextView.setText("正確題數：" + totalCorrect + "/" + totalQuestions);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -942,6 +961,7 @@ public class MainActivitya extends AppCompatActivity {
             if (diffStatus.equals("all_correct")){
                 feedback = "每個字都很標準！";
                 tv_result2.setText(feedback);
+                totalCorrect++; // 答對加一
             } else if (diffStatus.equals("incorrect_count")) {
                 feedback = "字數不對喔";
                 tv_result2.setText(feedback);
@@ -972,6 +992,9 @@ public class MainActivitya extends AppCompatActivity {
                     }
                     //feedback += std_bpmf + "唸成" + asr_bpmf + "了\n";
                 }
+                totalQuestions++; // 每次都要算進題數
+                // 更新顯示內容
+                scoreTextView.setText("正確題數：" + totalCorrect + "/" + totalQuestions);
                 // 將結果顯示到 TextView
                 tv_result2.setText(tech_result);
             }
