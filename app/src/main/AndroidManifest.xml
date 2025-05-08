@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.rfinal">
+    package="com.eb210.rfinal">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,23 +14,19 @@
         android:roundIcon="@drawable/dinasour"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rfinal">
-
+        <activity
+            android:name=".MainActivity_manual"
+            android:exported="false" />
         <!-- MainActivity2 should be non-exported -->
         <activity
             android:name=".MainActivity2"
-            android:exported="false" />
-
-        <!-- FreqLinearMapping should be non-exported -->
+            android:exported="false" /> <!-- FreqLinearMapping should be non-exported -->
         <activity
             android:name=".FreqLinearMapping"
-            android:exported="false" />
-
-        <!-- PreTestPage should be non-exported -->
+            android:exported="false" /> <!-- PreTestPage should be non-exported -->
         <activity
             android:name=".PreTestPage"
-            android:exported="false" />
-
-        <!-- Non-exported activities (no intent-filter) -->
+            android:exported="false" /> <!-- Non-exported activities (no intent-filter) -->
         <activity
             android:name=".MainActivitye"
             android:exported="false" />
@@ -45,16 +41,16 @@
             android:exported="false" />
         <activity
             android:name=".MainActivitya"
-            android:exported="false" />
-
-        <!-- MainActivity should be exported as it has intent-filter -->
-        <activity android:name=".MainActivity" android:exported="true">
+            android:exported="false" /> <!-- MainActivity should be exported as it has intent-filter -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
