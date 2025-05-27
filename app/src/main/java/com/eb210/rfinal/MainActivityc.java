@@ -14,12 +14,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,8 @@ import com.maple.recorder.recording.Recorder;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.json.JSONObject;
 
 
 public class MainActivityc extends AppCompatActivity {
@@ -63,6 +69,7 @@ public class MainActivityc extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save);
         btnStop = findViewById(R.id.btn_stop);
         btnCompare = findViewById(R.id.btn_compare);
+
 
         // 綁定 TextView
         txtResult2 = findViewById(R.id.txt_result2);
@@ -108,11 +115,11 @@ public class MainActivityc extends AppCompatActivity {
             public void onClick(View v) {
                 if (audioFiles.size() == 4) {
                     // 提供上傳的 API URL
-                    new UploadTask("https://140.125.45.129:412/call2").execute(audioFiles);
+                    new UploadTask("https://140.125.45.129:414/call2").execute(audioFiles);
 
                     // 將圖片載入 ImageView
                     ImageView imgPitchContour = findViewById(R.id.img_pitch_contour);
-                    String imageUrl = "https://140.125.45.129:412/get_image2";
+                    String imageUrl = "https://140.125.45.129:414/get_image2";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
                             .skipMemoryCache(true)
@@ -135,19 +142,19 @@ public class MainActivityc extends AppCompatActivity {
             public void onClick(View v) {
                 if (audioFiles.size() == 4) {
                     // 使用新的 URL 上傳音檔
-                    new UploadTask("https://140.125.45.129:412/call3").execute(audioFiles);
+                    new UploadTask("https://140.125.45.129:414/call3").execute(audioFiles);
 
                     // 獲取 ImageView
                     ImageView imgPitchContour2 = findViewById(R.id.img_pitch_contour2);
                     ImageView imgPitchContour = findViewById(R.id.img_pitch_contour);
                     // 使用 Glide 載入圖片
-                    String imageUrl = "https://140.125.45.129:412/get_image2";
+                    String imageUrl = "https://140.125.45.129:414/get_image2";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
                             .skipMemoryCache(true)  // 避免載入快取
                             .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁碟快取
                             .into(imgPitchContour);
-                    imageUrl = "https://140.125.45.129:412/get_image3";
+                    imageUrl = "https://140.125.45.129:414/get_image3";
                     Glide.with(MainActivityc.this)
                             .load(imageUrl)
                             .skipMemoryCache(true)  // 避免載入快取
@@ -163,6 +170,17 @@ public class MainActivityc extends AppCompatActivity {
 
         // 初始時停用停止錄音按鈕
         btnStop.setEnabled(false);
+
+        //test botton
+        Button btnTestPost = findViewById(R.id.btnTestPost);
+        btnTestPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendTestPost();
+            }
+        });
+
+
     }
 
     // 開始錄音
@@ -321,4 +339,50 @@ public class MainActivityc extends AppCompatActivity {
             recorder = null;
         }
     }
+    private void sendTestPost() {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://140.125.45.129:414/test_post"); // ⚠️ 修改為你的實際 IP 和 port
+
+                TrustManager[] trustAllCerts = new TrustManager[]{
+                        new X509TrustManager() {
+                            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+                        }
+                };
+
+                SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+                HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                String postData = "chinese_text=" + URLEncoder.encode("測試資料 from Android", "UTF-8");
+                OutputStream os = conn.getOutputStream();
+                os.write(postData.getBytes());
+                os.flush();
+                os.close();
+
+                // 你也可以不處理回應，單純等它完成
+                conn.getInputStream().close();
+
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivityc.this, "✅ 測試送出成功", Toast.LENGTH_SHORT).show();
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(MainActivityc.this, "❌ 發送失敗：" + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+            }
+        }).start();
+    }
+
+
 }

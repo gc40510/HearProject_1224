@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <EditText
+        android:id="@+id/inputChinese"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="請輸入中文句子"
+        android:textColor="#000000"
+        android:textColorHint="#888888" />
+
+    <Button
+        android:id="@+id/btnConvert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="轉換與播放"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/outputTailo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="台羅顯示區"
+        android:textColor="#000000" />
+    <Button
+        android:id="@+id/btnTestPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="測試連線"
+        android:textColor="#000000" />
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="400dp"
+        android:layout_height="300dp">
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/record_btn"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btn_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="再錄一次"
+            android:layout_gravity="bottom|start"
+            android:textColor="#000000"
+           />
+
+        <Button
+            android:id="@+id/btn_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="顯示結果"
+            android:layout_gravity="bottom|center"
+            android:textColor="#000000"
+            />
+
+    </FrameLayout>
+
+
+</LinearLayout>

@@ -54,6 +54,7 @@
 
                     </LinearLayout>
 
+
                     <!-- 01 -->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -170,6 +171,17 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
+
+                    <!-- 新增的功能介紹按鈕 -->
+                    <Button
+                        android:id="@+id/btn_feature_intro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="功能介紹"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:backgroundTint="#BB5E00"
+                        android:textColor="@color/black"/>
                     <!-- 03 -->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -213,6 +225,7 @@
                         android:gravity="center"
                         android:text="Reset"
                         android:background="@color/black"/>
+
                 </LinearLayout>
 
             </FrameLayout>

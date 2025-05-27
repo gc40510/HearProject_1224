@@ -43,6 +43,9 @@
             android:name=".MainActivitya"
             android:exported="false" /> <!-- MainActivity should be exported as it has intent-filter -->
         <activity
+            android:name=".MainActivity3"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -51,6 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

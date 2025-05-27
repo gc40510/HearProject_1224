@@ -178,7 +178,7 @@ public class MainActivity<fontType> extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("請選擇您的課程");
-                String items[] = {"中文","台語", "動物", "日常用品"}; //-1代表沒有條目被選中 綜合改george
+                String items[] = {"中文","台語", "動物", "單詞練習"}; //-1代表沒有條目被選中 綜合改george
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -189,6 +189,12 @@ public class MainActivity<fontType> extends AppCompatActivity {
                             selectedLanguage = "chinese";
                         } else if (item.equals("台語")) {
                             selectedLanguage = "tailo";
+                        }
+                        else if (item.equals("單詞練習")) {
+                            Intent newIntent = new Intent(MainActivity.this, MainActivity3.class);
+                            startActivity(newIntent);
+                            dialog.dismiss();
+                            return;
                         }
 
                         Toast.makeText(getApplicationContext(),item.toString(),Toast.LENGTH_LONG).show();
@@ -231,6 +237,39 @@ public class MainActivity<fontType> extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // 取得「功能介紹」按鈕
+        Button featureIntroButton = findViewById(R.id.btn_feature_intro);
+        featureIntroButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String featureInfo = "聽力測試\n" +
+                        "聽力測試模組能夠測量使用者在不同頻率下的聽覺閾值。透過純音聽力測試 (PTA)，系統將播放多個頻率的純音，並記錄使用者聽到的最小音量值。測試涵蓋的頻率範圍從 125 Hz 到 8000 Hz，測得的聽力曲線將幫助調整音訊播放，以補償使用者的聽力缺陷，提升聽覺清晰度。\n\n" +
+                        "單詞練習\n" +
+                        "單詞練習模組提供一個發音練習環境。系統會隨機選取單詞，播放經過頻率增強的標準發音音檔，並引導使用者模仿。使用者的發音會被送至語音辨識模組進行分析，並回傳錯誤位置、發音技巧建議以及音高曲線視覺化回饋，幫助使用者有效提升發音準確度。\n\n" +
+                        "發音指導\n" +
+                        "發音指導模組專注於中文聲母與韻母的發音，提供精確的嘴型與發音指導。系統將協助使用者掌握正確的嘴型與氣流控制，改善發音的準確性，特別對於發音困難的使用者。\n\n" +
+                        "聲調分析\n" +
+                        "聲調分析模組針對中文四聲進行發音清晰度測試。使用者將錄製特定的四聲單字，並進行比對與分析。系統將生成音高曲線，並視覺化展示練習前後的聲調變化，以此來評估使用者在發音穩定性與準確度上的進步。";
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("功能介紹")
+                        .setMessage(featureInfo)
+                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // 修改「確定」按鈕的文字顏色為黑色
+                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setTextColor(Color.BLACK);
+            }
+        });
+
 
 
 

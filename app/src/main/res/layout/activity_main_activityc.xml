@@ -34,6 +34,12 @@
             android:textColor="#000000"
             android:layout_margin="8dp"
             android:padding="8dp"/>
+        <Button
+            android:id="@+id/btnTestPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="測試連線"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <!-- 第一張 Pitch Contour 圖片 -->

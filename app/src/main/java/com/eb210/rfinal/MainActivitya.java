@@ -489,9 +489,9 @@ public class MainActivitya extends AppCompatActivity {
                 //語言選擇不同的api
                 String url;
                 if (currentLanguage.equals("chinese")) {
-                    url = "https://140.125.45.129:412/call4"; // 台語
+                    url = "https://140.125.45.129:414/call4"; // 台語
                 } else {
-                    url = "https://140.125.45.129:412/call";  // 中文
+                    url = "https://140.125.45.129:414/call";  // 中文
                 }
                 
                 if (recordStatus == 0) {
@@ -702,7 +702,7 @@ public class MainActivitya extends AppCompatActivity {
                 tv_title.setText(spannableStringBuilder);
 
 
-                String imageUrl = "https://140.125.45.129:412/get_image";
+                String imageUrl = "https://140.125.45.129:414/get_image";
                 //Bitmap bmp = BitmapFactory.decodeByteArray(byte, 0, byte.length);
                 Glide.with(v.getContext())
                         .asBitmap()
