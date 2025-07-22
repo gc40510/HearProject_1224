@@ -1,66 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="#FAFAFA">
 
-    <EditText
-        android:id="@+id/inputChinese"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="請輸入中文句子"
-        android:textColor="#000000"
-        android:textColorHint="#888888" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnConvert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="轉換與播放"
-        android:textColor="#000000" />
+        <!-- 中文輸入 -->
+        <EditText
+            android:id="@+id/inputChinese"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="請輸入中文句子"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/outputTailo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="台羅顯示區"
-        android:textColor="#000000" />
-    <Button
-        android:id="@+id/btnTestPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="測試連線"
-        android:textColor="#000000" />
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="400dp"
-        android:layout_height="300dp">
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/record_btn"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"/>
+        <!-- 台羅顯示區 -->
+        <TextView
+            android:id="@+id/outputTailo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="台羅顯示區"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="16dp" />
 
-        <Button
-            android:id="@+id/btn_repeat"
+        <!-- 功能按鈕列 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnConvert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="轉換並播放"
+                android:textColor="#000000"
+                android:layout_marginEnd="16dp" />
+
+            <Button
+                android:id="@+id/btnTestPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="測試連線"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- 麥克風與錄音按鈕區 -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="再錄一次"
-            android:layout_gravity="bottom|start"
-            android:textColor="#000000"
-           />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
 
-        <Button
-            android:id="@+id/btn_result"
-            android:layout_width="wrap_content"
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/record_btn"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center" />
+
+            <!-- 錄音控制按鈕列 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center">
+            </LinearLayout>
+        </LinearLayout>
+        <!-- 控制按鈕列：獨立排放 -->
+        <LinearLayout
+            android:id="@+id/controlPanelLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="顯示結果"
-            android:layout_gravity="bottom|center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_repeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="再錄一次"
+                android:textColor="#000000"
+                android:layout_marginEnd="8dp"
+                app:backgroundTint="@color/buttonyellow" />
+
+            <Button
+                android:id="@+id/show_result_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="顯示結果"
+                android:textColor="#000000"
+                app:backgroundTint="@color/buttonyellow" />
+        </LinearLayout>
+
+
+        <!-- 發音技巧按鈕 -->
+        <Button
+            android:id="@+id/show_mouth_tech_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="查看發音技巧"
             android:textColor="#000000"
-            />
+            app:backgroundTint="@color/buttonyellow"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp" />
 
-    </FrameLayout>
-
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

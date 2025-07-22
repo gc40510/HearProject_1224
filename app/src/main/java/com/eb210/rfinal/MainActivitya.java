@@ -493,7 +493,7 @@ public class MainActivitya extends AppCompatActivity {
                 } else {
                     url = "https://140.125.45.129:414/call";  // 中文
                 }
-                
+
                 if (recordStatus == 0) {
                     // 錄音流程
                     try {
@@ -550,7 +550,7 @@ public class MainActivitya extends AppCompatActivity {
                         NetworkRequestTask networkRequestTask = new NetworkRequestTask(url,
                                 firebase_nowwavname_ch, firebase_nowwavname, audio_file);
                         networkRequestTask.execute();
-                        
+
                         //Log.d("HTTP Connection", response);
 
 
@@ -1029,9 +1029,12 @@ public class MainActivitya extends AppCompatActivity {
                     String targetPinyin = Arrays.toString(diffTailoProcess2(std_tailo, asr_tailo))
                             .replace("[", "").replace("]", "").trim();
 
-                    String consonantDiff = targetPinyin.split(",")[0].trim();
-                    String vowelDiff = targetPinyin.split(",")[1].trim();
-                    String toneDiff = targetPinyin.split(",")[2].trim();
+                    String[] diffParts = targetPinyin.split(",");
+
+                    String consonantDiff = diffParts.length > 0 ? diffParts[0].trim() : "";
+                    String vowelDiff     = diffParts.length > 1 ? diffParts[1].trim() : "";
+                    String toneDiff      = diffParts.length > 2 ? diffParts[2].trim() : "";
+
 
                     // 逐個錯誤符號處理：聲母
                     if (!consonantDiff.isEmpty()) {
@@ -1134,7 +1137,7 @@ public class MainActivitya extends AppCompatActivity {
             String asrVowel = asrParts[i][1].replaceAll("[0-9]", "");
             if (!stdVowel.equals(asrVowel)) {
                 vowelDiff += stdVowel + " ";   // 若不同，記錄標準發音的韻母（不含聲調）
-               // vowelDiff += stdParts[i][1] + " "; // 若不同，記錄標準發音的韻母（含聲調）
+                // vowelDiff += stdParts[i][1] + " "; // 若不同，記錄標準發音的韻母（含聲調）
             }
 
             // 比較聲調
@@ -1461,8 +1464,8 @@ public class MainActivitya extends AppCompatActivity {
         }
         Collections.shuffle(RandomIndex);
         for(int i = 1; i < n; i++){
-                FruitChinese.add(FruitChineseOrigin.get(RandomIndex.get(i)));
-                FruitEnglish.add(FruitEnglishOrigin.get(RandomIndex.get(i)));
+            FruitChinese.add(FruitChineseOrigin.get(RandomIndex.get(i)));
+            FruitEnglish.add(FruitEnglishOrigin.get(RandomIndex.get(i)));
         }
     }
     //等待旋轉
@@ -1510,7 +1513,10 @@ class FrequencyAdjuster extends AppCompatActivity{
     }
 
     public void loadAudio(int resId, Context context){
-
+        if (resId == 0) {
+            Log.e("FreqAdjust", "無效的資源 ID（resId == 0），請確認音檔名稱與是否存在於 res/raw");
+            return; // 提早結束，避免崩潰
+        }
         AssetFileDescriptor afd = context.getResources().openRawResourceFd(resId);
 
         int filesize = (int) afd.getLength();

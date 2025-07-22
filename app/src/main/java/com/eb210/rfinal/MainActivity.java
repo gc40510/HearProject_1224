@@ -178,7 +178,7 @@ public class MainActivity<fontType> extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("請選擇您的課程");
-                String items[] = {"中文","台語", "動物", "單詞練習"}; //-1代表沒有條目被選中 綜合改george
+                String items[] = {"中文","台語", "動物", "台語TTS發音"}; //-1代表沒有條目被選中 綜合改george
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -190,7 +190,7 @@ public class MainActivity<fontType> extends AppCompatActivity {
                         } else if (item.equals("台語")) {
                             selectedLanguage = "tailo";
                         }
-                        else if (item.equals("單詞練習")) {
+                        else if (item.equals("台語TTS發音")) {
                             Intent newIntent = new Intent(MainActivity.this, MainActivity3.class);
                             startActivity(newIntent);
                             dialog.dismiss();

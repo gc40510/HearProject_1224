@@ -171,14 +171,6 @@ public class MainActivityc extends AppCompatActivity {
         // 初始時停用停止錄音按鈕
         btnStop.setEnabled(false);
 
-        //test botton
-        Button btnTestPost = findViewById(R.id.btnTestPost);
-        btnTestPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendTestPost();
-            }
-        });
 
 
     }

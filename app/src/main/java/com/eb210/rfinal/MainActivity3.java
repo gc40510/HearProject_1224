@@ -1,24 +1,40 @@
 package com.eb210.rfinal;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.maple.recorder.recording.AudioChunk;
 import com.maple.recorder.recording.AudioRecordConfig;
 import com.maple.recorder.recording.MsRecorder;
 import com.maple.recorder.recording.PullTransport;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +63,11 @@ import java.net.URLEncoder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import pl.droidsonroids.gif.GifImageView;
 import com.maple.recorder.recording.AudioChunk;
@@ -71,7 +92,7 @@ public class MainActivity3 extends AppCompatActivity {
     Recorder recorder;
     File audio_file;
     ProgressDialog progressDialog;
-
+    Button show_mouth_tech_btn;
 
     // firebase
     String nowwav;
@@ -80,8 +101,10 @@ public class MainActivity3 extends AppCompatActivity {
     String standard_wav = "";
     String user_wav = "";
     String server_DTW = "";
+    String tts_tailo;
     JSONObject diff;
     Button show_result_btn;
+    final Context context = MainActivity3.this;
 
     FrequencyAdjuster frequencyAdjuster = new FrequencyAdjuster();
 
@@ -107,10 +130,9 @@ public class MainActivity3 extends AppCompatActivity {
         private String novwav;
         private File file;
         final Context context = MainActivity3.this;
-        public NetworkRequestTask(String url, String wavcontent, String novwav, File file) {
+        public NetworkRequestTask(String url, String wavcontent,File file) {
             this.url = url;
             this.wavcontent = wavcontent;
-            this.novwav = novwav;
             this.file = file;
         }
         @Override
@@ -141,7 +163,6 @@ public class MainActivity3 extends AppCompatActivity {
                 // 获取输出流
                 try (DataOutputStream os = new DataOutputStream(connection.getOutputStream())) {
                     writeTextParameter(os, "wavcontent", wavcontent);
-                    writeTextParameter(os, "nowwav", novwav);
                     writeFileParameter(os, "file", file);
                     //os.writeBytes("--" + generateBoundary() + "\r\n");
                     os.writeBytes("--" + generateBoundary() + "--");
@@ -220,7 +241,6 @@ public class MainActivity3 extends AppCompatActivity {
                 JSONObject resultjson = new JSONObject(result);
                 user_wav = resultjson.getString("kaldi");
                 standard_wav = resultjson.getString("standard");
-                server_DTW = resultjson.getString("dist");
                 diff = resultjson.getJSONObject("diff"); //注音部分的jsonobject
 
                 // 將 diff 儲存到檔案
@@ -250,6 +270,101 @@ public class MainActivity3 extends AppCompatActivity {
             show_result_btn.callOnClick();
         }
     }
+    private SpannableString diffTailoProcess(String std_tailo, String asr_tailo) {
+        std_tailo = std_tailo.toLowerCase(); // 忽略大小寫
+        asr_tailo = asr_tailo.toLowerCase(); // 忽略大小寫
+
+        String[] stdSyllables = std_tailo.split("-");
+        String[] asrSyllables = asr_tailo.split("-");
+
+        StringBuilder resultBuilder = new StringBuilder();
+        int minLength = Math.min(stdSyllables.length, asrSyllables.length);
+
+        boolean isPerfectMatch = true; // 假設兩者發音完全一致
+        int currentOffset = 0;
+
+        // 拼接標準發音和實際發音的比較
+        for (int i = 0; i < minLength; i++) {
+            String[][] stdParts = splitTaiLoPinyin(stdSyllables[i]);  // 返回的是二維陣列
+            String[][] asrParts = splitTaiLoPinyin(asrSyllables[i]);
+
+            // 如果標準發音和 ASR 發音不相同，則顯示 "唸成"
+            if (!stdSyllables[i].equals(asrSyllables[i])) {
+                resultBuilder.append(stdSyllables[i]).append("唸成").append(asrSyllables[i]).append("\n");
+                isPerfectMatch = false; // 標記為不完全匹配
+            }
+
+            currentOffset += stdSyllables[i].length() + 2 + asrSyllables[i].length(); // 加上 " 唸成 " 和換行符號
+        }
+
+        // 如果沒有錯誤，顯示 "唸得非常標準"
+        if (isPerfectMatch) {
+            resultBuilder.append("唸得非常標準");
+        }
+
+        SpannableString resultText = new SpannableString(resultBuilder.toString());
+
+        currentOffset = 0; // 重設 offset 用於標註顏色
+
+        // 比較每個拼音並標註不同部分
+        for (int i = 0; i < minLength; i++) {
+            String[][] stdParts = splitTaiLoPinyin(stdSyllables[i]);
+            String[][] asrParts = splitTaiLoPinyin(asrSyllables[i]);
+
+            // 計算聲母和韻母的起始和結束位置
+            int stdStart = currentOffset;
+            int stdEnd = stdStart + stdParts[0][0].length() + stdParts[0][1].length();
+            int asrStart = stdEnd + 2; // "唸成" 的長度是 3
+            int asrEnd = asrStart + asrParts[0][0].length() + asrParts[0][1].length();
+
+            // 如果聲母不同，標註紅色
+            if (!stdParts[0][0].equals(asrParts[0][0])) {
+                resultText.setSpan(new ForegroundColorSpan(Color.RED), stdStart, stdStart + stdParts[0][0].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                resultText.setSpan(new ForegroundColorSpan(Color.RED), asrStart, asrStart + asrParts[0][0].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            // 如果韻母不同，標註藍色
+            if (!stdParts[0][1].equals(asrParts[0][1])) {
+                resultText.setSpan(new ForegroundColorSpan(Color.BLUE), stdStart + stdParts[0][0].length(), stdEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                resultText.setSpan(new ForegroundColorSpan(Color.BLUE), asrStart + asrParts[0][0].length(), asrEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            // 更新 offset
+            currentOffset += stdSyllables[i].length() + 3 + asrSyllables[i].length(); // 加上 " 唸成 " 和換行符號
+        }
+
+        return resultText;
+    }
+    private static final String[] CONSONANTS = {
+            "tsh", "chh", "ph", "th", "kh", "ts", "ch", "ng",
+            "b", "p", "t", "k", "m", "n", "l", "s", "g", "h", "j"
+    };
+
+    private static String[][] splitTaiLoPinyin(String phrase) {
+        String[] words = phrase.split("-");
+        String[][] result = new String[words.length][2];
+
+        for (int i = 0; i < words.length; i++) {
+            String word = removeTone(words[i].toLowerCase());
+            result[i] = splitInitialFinal(word);
+        }
+        return result;
+    }
+
+    private static String removeTone(String input) {
+        if (input == null || input.isEmpty()) return input;
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{M}", "");
+    }
+
+    private static String[] splitInitialFinal(String syllable) {
+        for (String consonant : CONSONANTS) {
+            if (syllable.startsWith(consonant)) {
+                return new String[]{consonant, syllable.substring(consonant.length())};
+            }
+        }
+        return new String[]{"", syllable};
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -263,8 +378,37 @@ public class MainActivity3 extends AppCompatActivity {
         String firebase_nowwavname = "start_test";
         //test botton
         btnTestPost = findViewById(R.id.btnTestPost);
-        show_result_btn = (Button) findViewById(R.id.btn_result);
-        
+        show_result_btn = (Button) findViewById(R.id.show_result_btn);
+        show_mouth_tech_btn = (Button) findViewById(R.id.show_mouth_tech_btn);
+
+        show_mouth_tech_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 加載佈局文件
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                View alert = layoutInflater.inflate(R.layout.show_mouth_tech, null);
+
+                // 創建並顯示對話框
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setView(alert);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // 綁定佈局中的按鈕
+                Button btn_OK = alert.findViewById(R.id.OK2);
+                TextView tv_result2 = alert.findViewById(R.id.tv_result2);
+
+                // 為按鈕設定點擊事件
+                btn_OK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss(); // 關閉對話框
+                    }
+                });
+                processTaiwanesePronunciation(tv_result2);
+
+            }
+        });
         btnTestPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,7 +437,7 @@ public class MainActivity3 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //語言選擇不同的api
-                String url = "https://140.125.45.129:414/call4";
+                String url = "https://140.125.45.129:414/call5";
                 if (recordStatus == 0) {
                     // 錄音流程
                     try {
@@ -339,16 +483,15 @@ public class MainActivity3 extends AppCompatActivity {
 
                         //String response = sendPostRequest(firebase_nowwavname_ch, firebase_nowwavname, audio_file);
 
-                        Log.d("HTTP", "nowwavname is "+firebase_nowwavname);
 
                         progressDialog = new ProgressDialog(MainActivity3.this);
                         progressDialog.setTitle("處理中");
                         progressDialog.setMessage("正在處理音檔中");
                         progressDialog.show();
 
-
+                        firebase_nowwavname_ch = "si-kue";
                         NetworkRequestTask networkRequestTask = new NetworkRequestTask(url,
-                                firebase_nowwavname_ch, firebase_nowwavname, audio_file);
+                                tts_tailo,audio_file);
                         networkRequestTask.execute();
 
                         //Log.d("HTTP Connection", response);
@@ -361,7 +504,98 @@ public class MainActivity3 extends AppCompatActivity {
 
                     recordStatus++;
                     recordStatus %= 2;
+                    btnmic.setImageDrawable(getResources().getDrawable(R.drawable.microphone));
                 }
+            }
+        });
+        show_result_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // ✅ 檢查 diff 是否為 null
+                if (diff == null) {
+                    Toast.makeText(context, "請先完成錄音與伺服器回傳，再顯示結果", Toast.LENGTH_LONG).show();
+                    return; // 中止後續處理
+                }
+                if (progressDialog == null) {
+                    progressDialog = new ProgressDialog(MainActivity3.this);
+                    progressDialog.setTitle("處理中");
+                }
+                progressDialog.setMessage("正在處理圖檔中");
+                progressDialog.show();
+
+
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                View alert = layoutInflater.inflate(R.layout.show_result, null);
+                AlertDialog.Builder scn = new AlertDialog.Builder(context);
+                scn.setView(alert);
+                AlertDialog SCN = scn.show();
+                Button btn_OK = (Button)alert.findViewById(R.id.OK);
+                TextView tv_result = (TextView)alert.findViewById(R.id.tv_result);
+                TextView tv_title = (TextView)alert.findViewById(R.id.tv_title);
+                ImageView img_view_result = (ImageView)alert.findViewById(R.id.imageView);
+
+                String[] target = standard_wav.replace('\n', '\0').split(" ");
+                String[] refrence = user_wav.replace('\n', '\0').split(" ");
+
+                DTW dtw = new DTW(context);
+                Map<String, List<String>> ans = dtw.dtw(target, refrence);
+                Map<String, Integer> count = new HashMap<String, Integer>();
+                String[] state = new String[target.length/2];
+                String feedback = "";
+                //處理回傳的json中的diff
+                feedback = "";
+                try {
+                    String diffStatus = diff.getString("status");
+                    if (diffStatus.equals("all_correct")){
+                        feedback = "每個字都很標準！";
+                        tv_result.setText(feedback);
+                    } else if (diffStatus.equals("incorrect_count")) {
+                        feedback = "字數不對喔";
+                        tv_result.setText(feedback);
+                    } else {
+                        JSONArray diffIncorrects = diff.getJSONArray("incorrect_pinyin");
+                        SpannableStringBuilder feedbackcolor = new SpannableStringBuilder();
+                        for (int i = 0; i < diffIncorrects.length(); i++) {
+                            JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
+                            String std_bpmf, asr_bpmf;
+                            std_bpmf = diffIncorrect.getString("expected_tailo");
+                            asr_bpmf = diffIncorrect.getString("actual_tailo");
+                            feedbackcolor.append(diffTailoProcess(std_bpmf, asr_bpmf));
+                        }
+                        tv_result.setText(feedbackcolor);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                String imageUrl = "https://140.125.45.129:414/get_image";
+                //Bitmap bmp = BitmapFactory.decodeByteArray(byte, 0, byte.length);
+                Glide.with(v.getContext())
+                        .asBitmap()
+                        .skipMemoryCache(true) // 禁用内存缓存
+                        .diskCacheStrategy(DiskCacheStrategy.NONE) // 禁用磁盘缓存
+                        .load(imageUrl)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+                                img_view_result.setImageBitmap(bitmap);
+                            }
+                        });
+
+
+                progressDialog.dismiss();
+
+                //img_view_result.setImageBitmap(Bitmap.createScaledBitmap());
+
+                btn_OK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SCN.dismiss();
+                    }
+                });
+
             }
         });
     }
@@ -424,12 +658,12 @@ public class MainActivity3 extends AppCompatActivity {
                     Log.d("TTSRequestTask", "📨 伺服器回應內容: " + result.toString());
 
                     JSONObject json = new JSONObject(result.toString());
-                    String tailo = json.getString("tailo");
+                    tts_tailo = json.getString("tailo");
                     String audioUrl = json.getString("fast_audio_url");
-                    Log.d("TTSRequestTask", "✅ 台羅文字：" + tailo);
+                    Log.d("TTSRequestTask", "✅ 台羅文字：" + tts_tailo);
                     Log.d("TTSRequestTask", "🎧 音檔網址：" + audioUrl);
 
-                    return new String[]{tailo, audioUrl};
+                    return new String[]{tts_tailo, audioUrl};
                 } else {
                     Log.e("TTSRequestTask", "❌ 伺服器錯誤: " + responseCode);
                 }
@@ -522,7 +756,120 @@ public class MainActivity3 extends AppCompatActivity {
             }
         }).start();
     }
+    private void processTaiwanesePronunciation(TextView tv_result2) {
+        try {
+            String feedback = "";
+            String diffStatus = diff.getString("status");
+            if (diffStatus.equals("all_correct")) {
+                feedback = "每個字都很標準！";
+                tv_result2.setText(feedback);
+            } else if (diffStatus.equals("incorrect_count")) {
+                feedback = "字數不對喔";
+                tv_result2.setText(feedback);
+            } else {
+                JSONArray diffIncorrects = diff.getJSONArray("incorrect_pinyin");
+                SpannableStringBuilder tech_result = new SpannableStringBuilder();
+                for (int i = 0; i < diffIncorrects.length(); i++) {
+                    JSONObject diffIncorrect = diffIncorrects.getJSONObject(i);
+                    String std_tailo = diffIncorrect.getString("expected_tailo");
+                    String asr_tailo = diffIncorrect.getString("actual_tailo");
 
+                    String targetPinyin = Arrays.toString(diffTailoProcess2(std_tailo, asr_tailo))
+                            .replace("[", "").replace("]", "").trim();
+
+                    String consonantDiff = targetPinyin.split(",")[0].trim();
+                    String vowelDiff = targetPinyin.split(",")[1].trim();
+                    String toneDiff = targetPinyin.split(",")[2].trim();
+
+                    // 逐個錯誤符號處理：聲母
+                    if (!consonantDiff.isEmpty()) {
+                        String[] consonants = consonantDiff.split(" ");
+                        for (String consonant : consonants) {
+                            String[] consonantDetails = tailoInfo.getTaiLoDetails(consonant);
+                            SpannableString spannableString = new SpannableString(
+                                    "\n" + consonant + "發音錯誤\n發音部位: " + consonantDetails[0] + "\n舌頭和嘴型: " + consonantDetails[1]);
+
+                            // 標紅
+                            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, consonant.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, consonant.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            tech_result.append(spannableString);
+                        }
+                    }
+
+                    // 逐個錯誤符號處理：韻母
+                    if (!vowelDiff.isEmpty()) {
+                        String[] vowels = vowelDiff.split(" ");
+                        for (String vowel : vowels) {
+                            String[] vowelDetails = tailoInfo.getTaiLoDetails(vowel);
+                            SpannableString spannableString = new SpannableString(
+                                    "\n" + vowel + "發音錯誤\n發音部位: " + vowelDetails[0] + "\n舌頭和嘴型: " + vowelDetails[1]);
+
+                            // 標紅
+                            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, vowel.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, vowel.length() + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            tech_result.append(spannableString);
+                        }
+                    }
+
+                    // 逐個錯誤符號處理：聲調
+                    if (!toneDiff.isEmpty()) {
+                        String[] tones = toneDiff.split(" ");
+                        for (String tone : tones) {
+                            String[] toneDetails = tailoInfo.getTaiLoDetails(tone);
+                            SpannableString spannableString = new SpannableString(
+                                    "\n" + tone + "聲 發音錯誤\n漢語調類: " + toneDetails[0] + "\n發音技巧-: " + toneDetails[1]);
+
+                            // 標紅
+                            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, tone.length() + 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new AbsoluteSizeSpan(30, true), 0, tone.length() + 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            tech_result.append(spannableString);
+                        }
+                    }
+                }
+                tv_result2.setText(tech_result);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // 台語發音技巧功能，比較字串並回傳不同部分
+    private static String[] diffTailoProcess2(String std_tailo, String asr_tailo) {
+        std_tailo = std_tailo.toLowerCase(); // 忽略大小寫
+        asr_tailo = asr_tailo.toLowerCase(); // 忽略大小寫
+
+        // 使用更新的 splitTaiLoPinyin 函數
+        String[][] stdParts = splitTaiLoPinyin(std_tailo); // 標準發音
+        String[][] asrParts = splitTaiLoPinyin(asr_tailo); // 實際發音
+
+        String consonantDiff = "";
+        String vowelDiff = "";
+        String toneDiff = "";
+
+        // 比較聲母、韻母和聲調，對每個單詞分別處理
+        for (int i = 0; i < stdParts.length; i++) {
+            // 比較聲母
+            if (!stdParts[i][0].equals(asrParts[i][0])) {
+                consonantDiff += stdParts[i][0] + " "; // 若不同，記錄標準發音的聲母
+            }
+
+            // 比較韻母（不含聲調）
+            String stdVowel = stdParts[i][1].replaceAll("[0-9]", "");
+            String asrVowel = asrParts[i][1].replaceAll("[0-9]", "");
+            if (!stdVowel.equals(asrVowel)) {
+                vowelDiff += stdVowel + " ";   // 若不同，記錄標準發音的韻母（不含聲調）
+                // vowelDiff += stdParts[i][1] + " "; // 若不同，記錄標準發音的韻母（含聲調）
+            }
+
+            // 比較聲調
+            String stdTone = stdParts[i][1].replaceAll("[^0-9]", "");
+            String asrTone = asrParts[i][1].replaceAll("[^0-9]", "");
+            if (!stdTone.equals(asrTone)) {
+                toneDiff += stdTone + " "; // 若不同，記錄標準發音的聲調
+            }
+        }
+
+        return new String[]{consonantDiff.trim(), vowelDiff.trim(), toneDiff.trim()};
+    }
 
     private void sendTestPost(String text) {
         new Thread(() -> {
